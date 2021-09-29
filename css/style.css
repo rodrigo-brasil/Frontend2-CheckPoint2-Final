@@ -1,0 +1,603 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;1,100;1,300;1,400&display=swap");
+
+:root {
+    --bg-primary: hsl(220, 13%, 95%);
+    --bg-secondary: #fff;
+    --color: #797979;
+    --color-title: #434343;
+    --color-hover: #298cef;
+    --background-color: #d1d1d1;
+    --a: #72b9ff;
+}
+* {
+    margin: 0;
+    padding: 0;
+    outline: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Roboto", sans-serif;
+    font-weight: 400;
+    scroll-behavior: smooth;
+}
+
+button,
+a {
+    cursor: pointer;
+    border: 0;
+    outline: 0;
+    text-decoration: none;
+}
+
+ul {
+    list-style: none;
+}
+
+/* Header */
+header {
+    width: 100%;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    box-shadow: 0 0.12rem 0.3rem rgba(0, 0, 0, 0.1);
+}
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin-inline: auto;
+}
+
+.title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 0.4rem;
+    position: relative;
+}
+
+.wrap {
+    font-size: 1.2em;
+    display: flex;
+    justify-content: space-between;
+    border-top: 0.1rem dashed #e8eaed;
+    padding-top: 0.5rem;
+}
+
+.search {
+    position: relative;
+    flex: 1 1 auto;
+}
+
+.search label {
+    position: absolute;
+    left: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    z-index: 1;
+}
+
+.search-input {
+    height: 2rem;
+    padding-left: 2rem;
+    padding-right: 0.5rem;
+    width: 100%;
+    border-radius: 0.75rem;
+    transform-origin: left;
+    transition: all 0.3s ease-in-out;
+    border: 0;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3);
+}
+.filter {
+    position: relative;
+}
+
+.filter-btn {
+    height: 2rem;
+    padding-inline: 0.7rem;
+    border-radius: 0.75rem;
+    margin-left: 0.25rem;
+}
+
+.filter-modal {
+    background-color: #f2f3f5;
+    width: 260px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    transform: translate(0, calc(100% + 2px));
+    border-radius: 0 0 4px 4px;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+    transform-origin: 0 0;
+    padding: 16px;
+    z-index: 1;
+    transition: scale 0.1s ease, opacity 0.1s ease;
+}
+
+.modal.hidden {
+    transform: scale(0.5);
+    opacity: 0;
+    display: none;
+}
+
+.api {
+    position: absolute;
+    left: 0;
+    width: 40px;
+    height: 40px;
+    background-color: var(--a);
+    border-radius: 50%;
+    padding: 2px;
+    box-shadow: 0 0 5px -1px rgba(255, 255, 255, 80%) inset, 0px 0px 4px 1px rgba(0, 0, 0, 70%);
+}
+.api .svg{
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    -webkit-mask: url(../img/ic-api.svg) no-repeat center;
+    mask: url(../img/ic-api.svg) no-repeat 0 0;
+}
+
+.api:hover {
+    background-color: var(--color-hover);
+    box-shadow: 0 0 5px -1px rgba(255, 255, 255, 80%) inset, 0px 0px 4px 1px rgba(0, 0, 0, 50%);
+} 
+
+.theme {
+    position: absolute;
+    right: 0;
+}
+
+.theme-checkbox {
+    position: absolute;
+    margin-left: -9999px;
+    visibility: hidden;
+}
+
+.theme-checkbox + label {
+    display: block;
+    position: relative;
+    cursor: pointer;
+    outline: none;
+    user-select: none;
+    padding: 2px;
+    width: 3.5rem;
+    height: 2.125rem;
+    background-color: #7daaff;
+    border-radius: 2rem;
+    transition: background-color 0.4s;
+    font-size: 1.3em;
+    box-shadow: -5px 0 5px -2px rgba(255, 255, 255, 70%) inset, -3px 0px 3px 0px rgba(0, 0, 0, 25%);
+    transition: box-shadow 0.3s;
+}
+
+.theme-checkbox + label:before,
+.theme-checkbox + label:after {
+    position: absolute;
+    content: "";
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-style: normal;
+    font-variant: normal;
+    text-rendering: auto;
+}
+
+.theme-checkbox + label:after {
+    content: "\f185";
+    font-family: "Font Awesome 5 Pro";
+    font-weight: 300;
+    width: 1.625rem;
+    height: 1.625rem;
+    bottom: 0.25rem;
+    left: 0.20rem;
+    color: #fff14c;
+    border-radius: 100%;
+    transition: all 0.4s;
+}
+
+.theme-checkbox:checked + label {
+    background-color: #ccc;
+    box-shadow: 5px 0 5px -2px rgba(255, 255, 255, 70%) inset, 3px 0px 3px 0px rgba(0, 0, 0, 25%);
+    transition: box-shadow 0.3s;
+}
+
+.theme-checkbox:checked + label:after {
+    transform: translateX(1.625rem);
+    content: "\f755";
+    color: #000;
+}
+
+/* Parte de baixo de adicionar novas task */
+.section-add-todo {
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--bg-primary);
+    border-top-left-radius: 1.5rem 0.8rem;
+    border-top-right-radius: 1.5rem 0.8rem;
+    padding-top: 0.5rem;
+    box-shadow: 0 3px 2px 3px rgba(0, 0, 0, 0.4);
+}
+
+.section-add-todo .extras {
+    display: block;
+    height: 0;
+    transition: height 0.3s ease-in-out;
+    overflow: hidden;
+}
+
+.section-add-todo .extras.active {
+    height: 120px;
+    overflow: inherit;
+}
+
+.section-add-todo .extras > div {
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    justify-items: left;
+    align-items: center;
+    row-gap: 0.5rem;
+    height: 100%;
+}
+
+.section-add-todo .extras .dados-iniciais {
+    width: 100%;
+    display: flex;
+    justify-content: left;
+}
+
+.section-add-todo .extras .dados-iniciais > * {
+    border-radius: 0.5rem;
+    background-color: #fff;
+    padding: 0.3rem;
+}
+
+.section-add-todo .extras .dados-iniciais :last-child {
+    margin-left: 0.5rem;
+}
+
+.section-add-todo .extras .lembrete {
+    color: red;
+    border-radius: 0.5rem;
+    background-color: #fff;
+    padding: 0.3rem;
+}
+.section-add-todo .extras .lembrete div {
+    display: none;
+    align-items: stretch;
+}
+
+.section-add-todo .extras .lembrete div > a {
+    background-color: red;
+    color: #fff;
+    padding-left: 0.3rem;
+    padding-right: 0.3rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+}
+
+.section-add-todo .extras .lembrete > div > input[type="datetime-local"] {
+    border: 0;
+    border-right: 1px solid #ccc;
+    border-top-left-radius: 0.5rem;
+    border-bottom-left-radius: 0.5rem;
+}
+
+.section-add-todo .extras .categorias {
+    position: relative;
+}
+
+.section-add-todo .extras .categoria-modal {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: auto;
+    min-width: 155px;
+    transform: translate(0, calc(-100% - 8px));
+    border: 0.1rem solid #e8eaed;
+    background-color: #fff;
+    padding: 0.3rem;
+    max-height: 15rem;
+    overflow-y: auto;
+    box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.3);
+}
+
+.section-add-todo .extras .categorias .categoria-btn {
+    background-color: #fff;
+    padding: 0.2rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+}
+
+.section-add-todo .extras .categorias .categoria-btn input {
+    border: 0;
+    width: 12ch;
+    font-size: 1rem;
+    user-select: none;
+    cursor: pointer;
+    background-color: transparent;
+    text-align: center;
+}
+
+.extras .categoria-modal li {
+    padding: 0 0.5rem;
+    margin-top: 0.2rem;
+    margin-bottom: 0.3rem;
+    cursor: pointer;
+    text-transform: capitalize;
+}
+
+.extras .categoria-modal li input {
+    border: 0;
+    background-color: transparent;
+    border-bottom: 1px solid #e8eaed;
+    font-size: 1rem;
+    text-align: left;
+    width: 12ch;
+}
+
+.extras .categoria-modal li > a {
+    font-size: 1.2rem;
+    color: lightskyblue;
+}
+.extras .categoria-modal li:hover {
+    background-color: #e8eaed;
+}
+
+.section-add-todo .data-incial {
+    display: inline-block;
+}
+
+.section-add-todo .add-task {
+    width: 100%;
+    padding: 0.5rem;
+    position: relative;
+}
+.section-add-todo .add-task textarea {
+    width: 100%;
+    padding: 0.625rem 2.9rem 0.625rem 0.625rem;
+    border-radius: 0.75rem;
+    border: 0;
+    resize: none;
+    font-size: 1rem;
+    line-height: 1.3rem;
+    color: #3f424a;
+    overflow: hidden;
+}
+
+.section-add-todo > form {
+    position: relative;
+}
+
+.section-add-todo .add-task > button {
+    position: absolute;
+    right: 0.6rem;
+    top: 1rem;
+    color: white;
+    border-radius: 50%;
+    height: 2.5rem;
+    width: 2.5rem;
+    background-color: #5eb075;
+    background-image: linear-gradient(hsl(137, 34%, 65%), #5eb075);
+    box-shadow: 0 2px 5px #aaa, 0 0 3px #aaa, inset 0 2px 3px rgba(255, 255, 255, 0.5),
+        inset 0 -2px 3px rgba(0, 0, 0, 0.3);
+}
+
+.section-add-todo .add-task > button:hover {
+    filter: brightness(1.2);
+    color: darkgreen;
+}
+
+.section-add-todo .data-incial input {
+    border: 0;
+    font-size: 1rem;
+    width: 15ch;
+    background-color: transparent;
+}
+
+.section-add-todo .add-task button i {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2em;
+}
+
+/* Local onde as task ficam */
+.todo-container {
+    width: 100%;
+    max-width: 1300px;
+    margin-inline: auto;
+    display: flex;
+    justify-content: center;
+    align-items:center;
+    padding: 0 0.5rem;
+    gap: 3ch;
+    padding-bottom: 6rem;
+    flex-wrap: wrap;
+    margin-top: 1.5rem;
+}
+
+/* Task cards */
+.task {
+    position: relative;
+    user-select: none;
+    box-shadow: 0 0 0 3px #fff, 0px 0px 1px 5px rgba(0, 0, 0, 0.2), inset 0 3px 0 rgba(0, 0, 0, 0.15),
+        inset 0 -3px 0 rgba(0, 0, 0, 0.15), inset 3px 0 0 rgba(0, 0, 0, 0.08), inset -3px 0 0 rgba(0, 0, 0, 0.08);
+    border-radius: 0.75rem;
+    width: 100%;
+    max-width: 335px;
+    padding: 0.5rem;
+    padding-bottom: 1.3rem;
+
+}
+
+.task .title-task {
+    word-wrap: break-word;
+    font-size: 1.2em;
+    line-height: 1.4em;
+    text-align: left;
+    width: 100%;
+    margin-bottom: 0.5rem;
+    margin-top: 0.1rem;
+}
+
+.task.tachado {
+    text-decoration: line-through;
+}
+
+.task .check {
+    position: absolute;
+    left: 0.85rem;
+    top: 0.5rem;
+    height: 1.5rem;
+    width: 1.5rem;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -o-appearance: none;
+    appearance: none;
+    border-radius: 50%;
+    outline: none;
+    background-color: #fff;
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    transition: background-color 0.4s;
+}
+
+.task .check:checked {
+    background-color: rgb(50, 205, 50);
+    box-shadow: 0 0 0 2px rgba(50, 205, 50, 0.6);
+}
+
+.task .check:checked::before {
+    content: "\2713";
+    font-family: "Font Awesome 5 Pro";
+    font-size: 1.3em;
+    font-weight: 900;
+    height: 1.5rem;
+    width: 1.5rem;
+    color: #fff;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-style: normal;
+    font-variant: normal;
+    text-rendering: auto;
+}
+
+.task .check:hover::before {
+    content: "\2713";
+    font-family: "Font Awesome 5 Pro";
+    font-size: 1.3em;
+    font-weight: 900;
+    height: 1.5rem;
+    width: 1.5rem;
+    color: #000;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-style: normal;
+    font-variant: normal;
+    text-rendering: auto;
+}
+.task .check:checked:hover::before {
+    color: #fff;
+}
+
+.task .check:checked + p {
+    text-decoration: line-through;
+}
+
+.task .check i {
+    font-size: 1.5em;
+}
+
+.task p {
+    text-indent: 2.5rem;
+}
+
+.task .task-lembrete {
+    text-align: right;
+}
+
+.task .task-lembrete > span {
+    display: inline-flex;
+    align-items: center;
+    box-shadow: rgba(154, 160, 166, 0.54) 0px 0px 0px 1px inset;
+    border-radius: 12px;
+    font-size: 11px;
+    letter-spacing: 0.25px;
+    color: var(--color);
+    padding: 3px 5px;
+}
+
+.task .task-lembrete > span > i {
+    font-size: 1.1em;
+    margin-right: 0.3rem;
+}
+
+.task .options {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-around;
+    margin-top: 0.7rem;
+    border-top: solid 1px #ccc;
+    padding: 0.3rem 0;
+    color: var(--color);
+    font-size: 0.8em;
+}
+
+#todoContainer > div > div.options > span:nth-child(2) {
+    white-space: pre;
+}
+
+.task .options .delete-button i {
+    font-size: 1.2em;
+}
+
+.fal.fa-tags {
+    transform: rotateY(180deg);
+}
+
+.task .options .options-buttons {
+    justify-self: right;
+}
+.task .options .delete-button {
+    background-color: transparent;
+    border: 1px solid var(--color);
+    padding: 0.5rem;
+    color: red;
+    border-radius: 0.5rem;
+}
+
+/* media large screen */
+@media screen and (min-width: 768px) {
+    .section-add-todo .extras .dados-iniciais {
+        justify-content: space-between;
+    }
+    .section-add-todo .extras .dados-iniciais :last-child {
+        margin-left: 0;
+    }
+
+    .section-add-todo {
+        max-width: 800px;
+    }
+
+    .section-add-todo .extras.active {
+        height: 70px;
+    }
+
+    .section-add-todo .extras > div {
+        justify-items: center;
+    }
+
+    .task .options {
+        padding: 0.3rem 0.6rem;
+    }
+}
