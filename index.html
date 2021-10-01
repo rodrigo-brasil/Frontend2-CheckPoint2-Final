@@ -35,10 +35,60 @@
                     <button class="filter-btn" data-modalTarget="#filterModal">
                         <i class="fas fa-filter"></i>
                         <span>Filtros</span>
+                        <span id="qtdFiltros"></span>
                     </button>
                     <div class="filter-modal modal hidden" id="filterModal">
-                        <p>Filtros</p>
-                        <button class="apply-button">Apply</button><button class="cancel-button">Limpar</button>
+                        <ul>
+                            <li>
+                                <a id="filterCategoria">
+                                    <i class="fal fa-tags"></i>
+                                    <span>Por Categoria</span>
+                                </a>
+                                <div class="filter-li-modal ">
+                                    <ul id="ulFilterCategoria">
+
+                                    </ul>
+                                </div>
+                            </li>
+                            <li>
+                                <a id="filterData">
+                                    <i class="fal fa-calendar-alt"></i>
+                                    <span>Por Data</span>
+                                </a>
+                                <div class="filter-li-modal ">
+                                    <ul id="ulFilterData">
+                                        <li>Mais recente</li>
+                                        <li>Mais antiga</li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li>
+                                <a id="filterStatus">
+                                    <i class="fal fa-check-circle"></i>
+                                    <span>Por Status</span>
+                                </a>
+                                <div class="filter-li-modal ">
+                                    <ul id="ulFilterStatus">
+                                        <li>Concluídas</li>
+                                        <li>Pendentes</li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li>
+                                <a id="filterLembrete">
+                                    <i class="fal fa-clock"></i>
+                                    <span>Lembrete</span>
+                                </a>
+                                <div class="filter-li-modal ">
+                                    <ul id="ulFilterLembrete">
+                                        <li>Com Lembretes</li>
+                                        <li>Sem Lembretes</li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                        
+                        <button class="cancel-button">Limpar</button>
                     </div>
                 </div>
             </div>
@@ -91,64 +141,64 @@
                 </div>
             </section>
 
-            <section class="section-add-todo bg_light" id="sectionAddTodo">
-                <div class="add-todo">
-                    <form class="add-todo-form" id="addForm" autocomplete="off">
+        </div>
+    </main>
+    
+    <section class="section-add-todo bg_light" id="sectionAddTodo">
+        <div class="add-todo">
+            <form class="add-todo-form" id="addForm" autocomplete="off">
 
-                        <div class="add-task" id="addTask">
-                            <textarea id="addTaskInput" name="title" maxlength="300" rows="2"
-                                placeholder="Adicionar tarefa"></textarea>
-                            <button type="submit">
-                                <i class="fas fa-angle-up"></i>
-                            </button>
+                <div class="add-task" id="addTask">
+                    <textarea id="addTaskInput" name="title" maxlength="300" rows="2"
+                        placeholder="Adicionar tarefa"></textarea>
+                    <button type="submit">
+                        <i class="fas fa-angle-up"></i>
+                    </button>
 
-                            <div class="extras" id="extras">
-                                <div>
-                                    <div class="dados-iniciais">
-                                        <span id="extraId"></span>
-                                        <div class="data-incial">
-                                            <span>Criado em:</span>
-                                            <input type="text" name="data" id="data" readonly></input>
-                                        </div>
-                                    </div>
+                    <div class="extras" id="extras">
+                        <div>
+                            <div class="dados-iniciais">
+                                <span id="extraId"></span>
+                                <div class="data-incial">
+                                    <span>Criado em:</span>
+                                    <input type="text" name="data" id="data" readonly></input>
+                                </div>
+                            </div>
 
-                                    <div class="categorias">
-                                        <a class="categoria-btn" data-modalTarget="#categoriaModal">
-                                            <i class="fal fa-tags"></i>
-                                            <input type="text" name="categoria" id="categoria-input" value="Geral"
-                                                readonly>
-                                            <i class="fas fa-chevron-down"></i>
-                                        </a>
-                                        <div class="categoria-modal modal hidden" id="categoriaModal">
-                                            <ul id="categoriasUl">
-                                                <li>Geral</li>
-                                                <li>
-                                                    <a id="btnAddCategoria"><i class="fas fa-plus-square"></i></a>
-                                                    <input type="text" maxlength="10" id="addCategoria">
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
+                            <div class="categorias">
+                                <a class="categoria-btn" data-modalTarget="#categoriaModal">
+                                    <i class="fal fa-tags"></i>
+                                    <input type="text" name="categoria" id="categoria-input" value="Geral"
+                                        readonly>
+                                    <i class="fas fa-chevron-down"></i>
+                                </a>
+                                <div class="categoria-modal modal hidden" id="categoriaModal">
+                                    <ul id="categoriasUl">
+                                        <li>Geral</li>
+                                        <li>
+                                            <a id="btnAddCategoria"><i class="fas fa-plus-square"></i></a>
+                                            <input type="text" maxlength="10" id="addCategoria">
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
 
-                                    <div class="lembrete">
-                                        <a id="addLembrete"><i class="fal fa-bell-on"></i><span> Criar
-                                                lembrete</span></a>
-                                        <div id="lembreteData">
-                                            <a id="removeLembrete"><i class="fas fa-times"></i></a>
-                                            <input type="datetime-local" name="lembrete" id="" disabled>
-                                        </div>
-                                    </div>
-
+                            <div class="lembrete">
+                                <a id="addLembrete"><i class="fal fa-bell-on"></i><span> Criar
+                                        lembrete</span></a>
+                                <div id="lembreteData">
+                                    <a id="removeLembrete"><i class="fas fa-times"></i></a>
+                                    <input type="datetime-local" name="lembrete" id="" disabled>
                                 </div>
                             </div>
 
                         </div>
-                    </form>
-                </div>
-            </section>
-        </div>
-    </main>
+                    </div>
 
+                </div>
+            </form>
+        </div>
+    </section>
 
 </body>
 

@@ -17,17 +17,25 @@ let apiUsed = false;
 function addTodotoArray(obj) {
     const todosObj = createTodoOjbect(obj)
     allTodos.push(todosObj);
-    showTodos(todosObj)
+    InsertTodoIntoDoom(todosObj)
     atualizarDetalhes();
+    updateCategories();
 }
 
-function showTodos(todosObj) {
+function InsertTodoIntoDoom(todosObj) {
     createTask(todosObj);
+}
+
+function exibirPorOrdem(todos = allTodos) {
+    div_todoContainer.innerHTML = "";
+    todos.forEach(todo => {
+        createTask(todo);
+    });
 }
 
 createTodoOjbect = function ({ title, data, categoria, id, lembrete, completed }) {
     return {
-        id: id == undefined ? ++idGlobal : id,
+        id: ++idGlobal,
         title: title,
         data: data,
         categoria: categoria,
@@ -37,8 +45,8 @@ createTodoOjbect = function ({ title, data, categoria, id, lembrete, completed }
     };
 };
 
-function createTask({ title, data, id, lembrete, completed }, position = "start") {
-    const span_categoria = document.createElement('span');
+function createTask({ title, data, id, lembrete, completed, categoria }, position = "start") {
+    const span_data = document.createElement('span');
     const div_task = document.createElement('div');
     const div_lembrete = document.createElement('div');
     div_task.classList.add('task');
@@ -49,20 +57,26 @@ function createTask({ title, data, id, lembrete, completed }, position = "start"
         div_lembrete.innerHTML = `<span><i class="far fa-clock"></i>${lembrete}</span>`;
     }
 
+    if (categoria == "API") {
+        span_data.textContent = "API";
+    } else {
+        span_data.textContent = `Criado em: ${data}`;
+    }
+
+
     div_task.innerHTML = `
         <input class="check" type="checkbox" name="completed" id="">
         <p class="title-task">${title}</p>
         ${div_lembrete.outerHTML}
         <div class="options">
             <span class="id-task"><i>#${id}</i></span>
-            <span>Criado em: ${data}</span>
-            
-            <div class="options-buttons">
-                <button class="delete-button" data-idTask="${id}">
-                    <i class="fas fa-trash-alt"></i>
-                </button>
-            </div>
-        </div>`
+            ${span_data.outerHTML}
+<div class="options-buttons">
+    <button class="delete-button" data-idTask="${id}">
+        <i class="fas fa-trash-alt"></i>
+    </button>
+</div>
+        </div >`
     /*         <button class="edit-button">
             <i class="fas fa-pen"></i>
         </button> */
@@ -96,12 +110,12 @@ function validarInputs(input) {
     return true;
 }
 
-function updateVisibleTasks() {
-    allTodos.forEach(todo => {
+function updateVisibleTasks(todos = allTodos) {
+    todos.forEach(todo => {
         if (todo.visible) {
-            document.querySelector(`[data-idTask="${todo.id}"]`).style.display = "block";
+            document.querySelector(`[data - idTask="${todo.id}"]`).style.display = "block";
         } else {
-            document.querySelector(`[data-idTask="${todo.id}"]`).style.display = "none";
+            document.querySelector(`[data - idTask= "${todo.id}"]`).style.display = "none";
         }
     });
 }
@@ -132,7 +146,10 @@ async function getTodosApi() {
 
 async function addTodosApiIntoDom() {
     const todosApi = await getTodosApi();
-    todosApi.forEach(todo => addTodotoArray(todo));
+    todosApi.forEach(todo => {
+        todo.categoria = "API";
+        addTodotoArray(todo)
+    });
 }
 
 function positionSectionAddToDo() {
@@ -166,7 +183,47 @@ function atualizarDetalhes() {
     document.getElementById('countPending').textContent = countPending;
 }
 
+function updateCategories() {
+    const categories = [... new Set(allTodos.map(todo => todo.categoria.toLowerCase()))];
+    const ul = document.getElementById('ulFilterCategoria');
+    const olderCategories = Array.from(ul.querySelectorAll('li')).map(li => li.textContent.toLowerCase());
+    const categoriesToAdd = categories.filter(category => !olderCategories.includes(category));
+    categoriesToAdd.forEach(category => {
+        const li = document.createElement('li');
+        li.textContent = category;
+        ul.appendChild(li);
+    });
+}
+
+function filterTodos(event) {
+    let arrayOrdenada = [...allTodos]
+    switch (event) {
+        case "Mais recente":
+            arrayOrdenada.sort((a, b) => b.id - a.id);
+            break;
+        case "Mais antigo":
+            arrayOrdenada.sort((a, b) => a.id - b.id);
+            break;
+        case "Pendentes":
+            arrayOrdenada.sort((a, b) => b.completed - a.completed);
+            break;
+        case "Concluídas":
+            arrayOrdenada.sort((a, b) => a.completed - b.completed);
+            break;
+        case "Com Lembretes":
+            arrayOrdenada = arrayOrdenada.filter(todo => todo.lembrete != null);
+            break;
+        case "Sem Lembretes":
+            arrayOrdenada = arrayOrdenada.filter(todo => !todo.lembrete != null);
+            break;
+        default:
+            break;
+    }
+    exibirPorOrdem(arrayOrdenada);
+}
+
 function init() {
+    updateCategories();
     atualizarDetalhes();
     positionSectionAddToDo();
 }
@@ -243,11 +300,12 @@ mobile_menu.addEventListener('click', function (e) {
 
 document.querySelector('#searchInput').addEventListener('input', function (e) {
     const search = e.target.value.toLowerCase();
-    allTodos.forEach(todo => todo.visible=true);
+    allTodos.forEach(todo => todo.visible = true);
     const todos = allTodos.filter(todo => !todo.title.toLowerCase().includes(search));
     todos.forEach(todo => todo.visible = false);
     updateVisibleTasks();
 });
+
 
 
 // Global events listener
@@ -305,6 +363,24 @@ document.addEventListener('click', function (e) {
         atualizarDetalhes();
     }
 
+    if (e.target.closest(".filter-modal [class^=filter-li]")) {
+        
+        e.target.parentElement.querySelectorAll("li.active").forEach(element => element.classList.remove("active"));
+        e.target.classList.toggle('active');
+        filterTodos(e.target.textContent);
+        const qtdAtivos = document.querySelectorAll("li.active").length
+        if (qtdAtivos > 0)
+            document.getElementById("qtdFiltros").textContent = qtdAtivos
+        else
+            document.getElementById("qtdFiltros").textContent = ""
+    }
+
+    if (e.target.closest(".filter-modal .cancel-button")) {
+        document.querySelectorAll("li.active").forEach(element => element.classList.remove("active"));
+        document.getElementById("qtdFiltros").textContent = ""
+        exibirPorOrdem();
+    }
+
     positionSectionAddToDo();
 });
 
@@ -318,6 +394,5 @@ window.addEventListener('resize', function () {
 // init
 document.addEventListener('DOMContentLoaded', function () {
     init();
-    console.log("init")
 });
 
