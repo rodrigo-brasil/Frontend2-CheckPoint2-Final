@@ -13,8 +13,6 @@ const allTodos = [];
 let idGlobal = 0;
 let apiUsed = false;
 
-const todos_showed = []
-
 
 function addTodotoArray(obj) {
     const todosObj = createTodoOjbect(obj)
@@ -34,7 +32,8 @@ createTodoOjbect = function ({ title, data, categoria, id, lembrete, completed }
         data: data,
         categoria: categoria,
         lembrete: lembrete,
-        completed: completed
+        completed: completed,
+        visible: true
     };
 };
 
@@ -95,6 +94,16 @@ function validarInputs(input) {
         return false;
     }
     return true;
+}
+
+function updateVisibleTasks() {
+    allTodos.forEach(todo => {
+        if (todo.visible) {
+            document.querySelector(`[data-idTask="${todo.id}"]`).style.display = "block";
+        } else {
+            document.querySelector(`[data-idTask="${todo.id}"]`).style.display = "none";
+        }
+    });
 }
 
 function retrairForm() {
@@ -232,6 +241,14 @@ mobile_menu.addEventListener('click', function (e) {
         showMenuMobile();
 });
 
+document.querySelector('#searchInput').addEventListener('input', function (e) {
+    const search = e.target.value.toLowerCase();
+    allTodos.forEach(todo => todo.visible=true);
+    const todos = allTodos.filter(todo => !todo.title.toLowerCase().includes(search));
+    todos.forEach(todo => todo.visible = false);
+    updateVisibleTasks();
+});
+
 
 // Global events listener
 document.addEventListener('click', function (e) {
@@ -299,5 +316,8 @@ window.addEventListener('resize', function () {
 });
 
 // init
-init()
+document.addEventListener('DOMContentLoaded', function () {
+    init();
+    console.log("init")
+});
 
