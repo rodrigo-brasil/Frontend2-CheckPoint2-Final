@@ -7,11 +7,11 @@ const btn_addLembrete = document.getElementById("addLembrete");
 const input_lembrete = document.querySelector("input[name='lembrete']");
 const btn_api = document.getElementById('btnApi');
 const div_todoContainer = document.getElementById('todoContainer');
+const mobile_menu = document.getElementById('mobileMenu');
 const date = new Date();
 const allTodos = [];
 let idGlobal = 0;
 let apiUsed = false;
-
 
 const todos_showed = []
 
@@ -20,6 +20,7 @@ function addTodotoArray(obj) {
     const todosObj = createTodoOjbect(obj)
     allTodos.push(todosObj);
     showTodos(todosObj)
+    atualizarDetalhes();
 }
 
 function showTodos(todosObj) {
@@ -43,9 +44,7 @@ function createTask({ title, data, id, lembrete, completed }, position = "start"
     const div_lembrete = document.createElement('div');
     div_task.classList.add('task');
     div_task.setAttribute('data-idTask', id);
-    if (completed == true) {
-        div_task.classList.add('tachado');
-    }
+
     if (lembrete) {
         div_lembrete.classList.add('task-lembrete');
         div_lembrete.innerHTML = `<span><i class="far fa-clock"></i>${lembrete}</span>`;
@@ -74,12 +73,17 @@ function createTask({ title, data, id, lembrete, completed }, position = "start"
     else
         document.getElementById('todoContainer').insertAdjacentElement('beforeend', div_task);
 
+    if (completed == true) {
+        div_task.firstElementChild.checked = true;
+    }
+
 }
 
 function deletarTodo(id) {
     let elemento = allTodos.find(todo => todo.id === id)
     let index = allTodos.indexOf(elemento);
     allTodos.splice(index, 1)
+    atualizarDetalhes();
 }
 
 function validarInputs(input) {
@@ -99,7 +103,8 @@ function retrairForm() {
     document.getElementById('categoriaModal').classList.add('hidden');
     document.getElementById("removeLembrete").parentElement.style.display = "none";
     input_lembrete.setAttribute("disabled", true)
-    btn_addLembrete.style.display = 'block';
+    btn_addLembrete.style.display = 'inline-flex';
+    section_Addtask.classList.add('bg_light');
     addForm.reset();
 }
 
@@ -107,6 +112,7 @@ function expandirForm() {
     document.getElementById('extras').classList.add('active');
     document.getElementById('data').value = date.toLocaleString("pt-BR", { dateStyle: "medium", timeStyle: "short" });
     document.getElementById('extraId').textContent = "#" + (idGlobal + 1);
+    section_Addtask.classList.remove('bg_light');
 }
 
 async function getTodosApi() {
@@ -119,6 +125,43 @@ async function addTodosApiIntoDom() {
     const todosApi = await getTodosApi();
     todosApi.forEach(todo => addTodotoArray(todo));
 }
+
+function positionSectionAddToDo() {
+    const { left, right, width } = div_todoContainer.getBoundingClientRect()
+    const midpoint = width / 2;
+    const midPosition = left + midpoint;
+    const offset = section_Addtask.offsetWidth / 2;
+    section_Addtask.style.left = `${midPosition - offset}px`;
+    section_Addtask.style.width = `${width * .9}px`;
+}
+
+function showMenuMobile() {
+    document.querySelector('main').classList.add('show-mobile-menu')
+    section_Addtask.classList.add('hidden');
+    document.body.style.overflow = "hidden";
+}
+
+function hideMenuMobile() {
+    document.querySelector('main').classList.remove('show-mobile-menu')
+    section_Addtask.classList.remove('hidden');
+    document.body.style.overflow = "auto";
+    positionSectionAddToDo();
+}
+
+function atualizarDetalhes() {
+    const countAlltodos = allTodos.length;
+    const countCompleted = allTodos.filter(todo => todo.completed).length;
+    const countPending = countAlltodos - countCompleted;
+    document.getElementById('countAlltodos').textContent = countAlltodos;
+    document.getElementById('countCompleted').textContent = countCompleted;
+    document.getElementById('countPending').textContent = countPending;
+}
+
+function init() {
+    atualizarDetalhes();
+    positionSectionAddToDo();
+}
+
 
 // Event listeners
 input_addTask.addEventListener('focus', expandirForm);
@@ -179,8 +222,15 @@ btn_addLembrete.addEventListener('click', function (e) {
 document.getElementById("removeLembrete").addEventListener('click', function (e) {
     document.getElementById("removeLembrete").parentElement.style.display = "none";
     input_lembrete.setAttribute("disabled", true)
-    btn_addLembrete.style.display = 'block';
+    btn_addLembrete.style.display = 'inline-flex';
 })
+
+mobile_menu.addEventListener('click', function (e) {
+    if (document.querySelector('main').classList.contains('show-mobile-menu'))
+        hideMenuMobile();
+    else
+        showMenuMobile();
+});
 
 
 // Global events listener
@@ -192,10 +242,27 @@ document.addEventListener('click', function (e) {
     if (e.target.closest('.task .delete-button')) {
         const button = e.target.closest('.task .delete-button')
         const task = button.parentElement.parentElement.parentElement;
-        task.remove();
-        const id = task.dataset["idTask"]
-        deletarTodo(id)
-        console.log(todos);
+
+        let idInterval = null;
+        clearInterval(idInterval);
+        idInterval = setInterval(deleteAnimation, 5);
+        let opacity = 1;
+        let pos = 0;
+        function deleteAnimation() {
+            if (opacity <= 0) {
+                clearInterval(idInterval);
+                const id = task.dataset["idTask"]
+                deletarTodo(id)
+                task.remove();
+            } else {
+                pos += 5;
+                opacity = opacity - 0.01;
+                task.style.left = pos + 'px';
+                task.style.opacity = opacity;
+            }
+        }
+
+
     }
 
     if (!e.target.closest('.modal') && !e.target.closest('[data-modalTarget]')) {
@@ -210,5 +277,27 @@ document.addEventListener('click', function (e) {
         document.getElementById("categoria-input").value = e.target.textContent;
     }
 
+    if (e.target.closest("input[type=checkbox][name=completed]")) {
+        const checkbox = e.target.closest("input[type=checkbox][name=completed]");
+        const id = checkbox.parentElement.dataset.idtask;
+        const task = allTodos.find(todo => todo.id == id);
+        if (checkbox.checked)
+            task.completed = true;
+        else
+            task.completed = false;
+        atualizarDetalhes();
+    }
+
+    positionSectionAddToDo();
 });
+
+window.addEventListener('resize', function () {
+    positionSectionAddToDo();
+    if (window.innerWidth > 945) {
+        hideMenuMobile();
+    }
+});
+
+// init
+init()
 

@@ -1,13 +1,18 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;1,100;1,300;1,400&display=swap");
 
 :root {
+    --bg-body: linear-gradient(to bottom, #4084fd 0%, #f1f1f1 100%);
     --bg-primary: hsl(220, 13%, 95%);
     --bg-secondary: #fff;
     --color: #797979;
     --color-title: #434343;
     --color-hover: #298cef;
     --background-color: #d1d1d1;
+    --color-link: #298cef;
+    --color-white: #fff;
+    -color-link-hover: #434343;
     --a: #72b9ff;
+    --transition-speed: 600ms;
 }
 * {
     margin: 0;
@@ -15,11 +20,18 @@
     outline: 0;
     box-sizing: border-box;
 }
+html,
+body {
+    min-height: 100vh;
+    height: 100%;
+}
 
 body {
     font-family: "Roboto", sans-serif;
     font-weight: 400;
     scroll-behavior: smooth;
+    background: rgb(34, 177, 208);
+    background: radial-gradient(circle, hsl(205, 85%, 57%) 0%, hsl(218, 98%, 62%) 100%);
 }
 
 button,
@@ -34,16 +46,132 @@ ul {
     list-style: none;
 }
 
+main {
+    background: var(--bg-secondary);
+    min-height: calc(100vh - 7.5rem);
+    display: grid;
+    grid-template-columns: 0px minmax(0, 1fr);
+}
+
+main.show-mobile-menu {
+    grid-template-columns: minmax(0, 1fr) 0px;
+}
+
+main div.grid-content {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    width: 100%;
+    overflow: hidden;
+}
+
+main nav.menu {
+    position: relative;
+    padding-top: 2rem;
+    box-shadow: 3px 0.15rem 0.2rem rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    transition: all 0.5s;
+}
+
+nav.menu .navbar-nav {
+    position: sticky;
+    top: 2rem;
+}
+
+.navbar-nav {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    color: var(--color-hover);
+}
+
+.nav-item {
+    width: 100%;
+}
+
+.nav-link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 5rem;
+    text-decoration: none;
+    transition: var(--transition-speed);
+}
+.nav-link:hover {
+    color: var(--color-white);
+    background-color: var(--color-hover);
+}
+
+.link-text {
+    margin-left: 1rem;
+}
+
+.nav-link i,
+.nav-link .svg {
+    margin: 0 1.5rem;
+    font-size: 1.3em;
+}
+
+.svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    -webkit-mask: url(../img/api.svg) no-repeat center;
+    mask: url(../img/api.svg) no-repeat 0 0;
+    background-color: var(--color-link);
+}
+
+.nav-link:hover .svg {
+    background-color: var(--color-white);
+}
+
+.navbar-nav .detalhes {
+    width: 100%;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--a);
+}
+
+.navbar-nav .detalhes > h3 {
+    text-align: center;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--color-title);
+}
+
+.navbar-nav .detalhes .flex {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    letter-spacing: 0.5px;
+}
+
+.navbar-nav .detalhes .flex .flex-item {
+    text-align: center;
+}
+.navbar-nav .detalhes .flex .flex-item :last-child {
+    color: var(--color);
+}
+
 /* Header */
 header {
+    position: relative;
     width: 100%;
     padding-top: 1rem;
     padding-bottom: 1rem;
-    box-shadow: 0 0.12rem 0.3rem rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0.12rem 0.3rem rgba(0, 0, 0, 0.2);
+    background: var(--bg-secondary);
+    height: 7.5rem;
+    padding-inline: 0.5rem;
 }
+
 .container {
-    width: 90%;
-    max-width: 1200px;
+    width: 100%;
+    max-width: 1600px;
     margin-inline: auto;
 }
 
@@ -54,6 +182,20 @@ header {
     text-align: center;
     margin-bottom: 0.4rem;
     position: relative;
+}
+
+.mobile-menu {
+    position: absolute;
+    left: 5px;
+    height: 2.63rem;
+    width: 2.63rem;
+    border-radius: 0.2rem;
+    background-color: var(--a);
+}
+
+.mobile-menu > i {
+    color: var(--color-white);
+    font-size: 1.5rem;
 }
 
 .wrap {
@@ -121,34 +263,6 @@ header {
     display: none;
 }
 
-.api {
-    position: absolute;
-    left: 0;
-    width: 40px;
-    height: 40px;
-    background-color: var(--a);
-    border-radius: 50%;
-    padding: 2px;
-    box-shadow: 0 0 5px -1px rgba(255, 255, 255, 80%) inset, 0px 0px 4px 1px rgba(0, 0, 0, 70%);
-}
-.api .svg{
-    width: 100%;
-    height: 100%;
-    background-color: #fff;
-    -webkit-mask: url(../img/ic-api.svg) no-repeat center;
-    mask: url(../img/ic-api.svg) no-repeat 0 0;
-}
-
-.api:hover {
-    background-color: var(--color-hover);
-    box-shadow: 0 0 5px -1px rgba(255, 255, 255, 80%) inset, 0px 0px 4px 1px rgba(0, 0, 0, 50%);
-} 
-
-.theme {
-    position: absolute;
-    right: 0;
-}
-
 .theme-checkbox {
     position: absolute;
     margin-left: -9999px;
@@ -164,12 +278,14 @@ header {
     padding: 2px;
     width: 3.5rem;
     height: 2.125rem;
-    background-color: #7daaff;
+    background-color: var(--a);
     border-radius: 2rem;
     transition: background-color 0.4s;
     font-size: 1.3em;
     box-shadow: -5px 0 5px -2px rgba(255, 255, 255, 70%) inset, -3px 0px 3px 0px rgba(0, 0, 0, 25%);
     transition: box-shadow 0.3s;
+    margin-inline: 1.5rem;
+    margin-left: auto;
 }
 
 .theme-checkbox + label:before,
@@ -191,7 +307,7 @@ header {
     width: 1.625rem;
     height: 1.625rem;
     bottom: 0.25rem;
-    left: 0.20rem;
+    left: 0.2rem;
     color: #fff14c;
     border-radius: 100%;
     transition: all 0.4s;
@@ -213,80 +329,104 @@ header {
 .section-add-todo {
     position: fixed;
     width: 100%;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: var(--bg-primary);
-    border-top-left-radius: 1.5rem 0.8rem;
-    border-top-right-radius: 1.5rem 0.8rem;
-    padding-top: 0.5rem;
-    box-shadow: 0 3px 2px 3px rgba(0, 0, 0, 0.4);
+    bottom: 1rem;
+    left: 0;
+    margin-inline: auto;
+    border-radius: 0.8rem;
+    box-shadow: 1px 1px 2px 2px rgba(0, 0, 0, 0.2);
+    background-color: var(--color-hover);
+    transition: background-color 0.5s ease-in-out;
+}
+
+.section-add-todo.hidden {
+    visibility: hidden;
+}
+
+.section-add-todo.bg_light {
+    background-color: var(--a);
+}
+
+.section-todo-container {
+    width: 100%;
+    height: 100%;
 }
 
 .section-add-todo .extras {
     display: block;
     height: 0;
-    transition: height 0.3s ease-in-out;
-    overflow: hidden;
+    transition: height 0.3s ease-in-out, clip 0.3s ease-in-out;
+    clip-path: inset(0);
 }
 
 .section-add-todo .extras.active {
     height: 120px;
-    overflow: inherit;
+    transition: height 0.3s ease-in-out, clip 0.3s ease-in-out;
+    clip-path: unset;
 }
 
 .section-add-todo .extras > div {
     padding: 0;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-    justify-items: left;
-    align-items: center;
-    row-gap: 0.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    justify-items: stretch;
+    align-items: stretch;
+    gap: 0.5rem;
     height: 100%;
 }
 
-.section-add-todo .extras .dados-iniciais {
-    width: 100%;
-    display: flex;
-    justify-content: left;
-}
-
-.section-add-todo .extras .dados-iniciais > * {
+.section-add-todo .extras > div > * {
     border-radius: 0.5rem;
     background-color: #fff;
     padding: 0.3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.section-add-todo .extras .dados-iniciais :last-child {
-    margin-left: 0.5rem;
+.section-add-todo .extras .dados-iniciais {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.section-add-todo .extras .dados-iniciais:last-child {
+    margin-left: 1rem;
 }
 
 .section-add-todo .extras .lembrete {
     color: red;
-    border-radius: 0.5rem;
-    background-color: #fff;
     padding: 0.3rem;
+}
+.section-add-todo .extras .lembrete > a {
+    display: inline-flex;
+    width: 100%;
+    justify-content: space-evenly;
+    align-items: center;
 }
 .section-add-todo .extras .lembrete div {
     display: none;
+    width: 100%;
     align-items: stretch;
+    justify-content: space-between;
 }
 
 .section-add-todo .extras .lembrete div > a {
     background-color: red;
     color: #fff;
-    padding-left: 0.3rem;
-    padding-right: 0.3rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    border-radius: 0.2rem;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
+    justify-content: center;
 }
 
 .section-add-todo .extras .lembrete > div > input[type="datetime-local"] {
     border: 0;
-    border-right: 1px solid #ccc;
-    border-top-left-radius: 0.5rem;
-    border-bottom-left-radius: 0.5rem;
+    padding: 0.3rem;
+    border: 1px solid #ccc;
+    border-radius: 0.2rem;
 }
 
 .section-add-todo .extras .categorias {
@@ -297,7 +437,7 @@ header {
     position: absolute;
     top: 0;
     right: 0;
-    width: auto;
+    width: 100%;
     min-width: 155px;
     transform: translate(0, calc(-100% - 8px));
     border: 0.1rem solid #e8eaed;
@@ -306,18 +446,20 @@ header {
     max-height: 15rem;
     overflow-y: auto;
     box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.3);
+    z-index: 1000;
 }
 
 .section-add-todo .extras .categorias .categoria-btn {
-    background-color: #fff;
+    display: inline-flex;
+    justify-content: space-between;
     padding: 0.2rem;
-    border-radius: 0.5rem;
     cursor: pointer;
+    width: 100%;
 }
 
 .section-add-todo .extras .categorias .categoria-btn input {
     border: 0;
-    width: 12ch;
+    width: auto;
     font-size: 1rem;
     user-select: none;
     cursor: pointer;
@@ -339,12 +481,18 @@ header {
     border-bottom: 1px solid #e8eaed;
     font-size: 1rem;
     text-align: left;
-    width: 12ch;
+    width: auto;
+    margin-left: 0.5rem;
 }
 
 .extras .categoria-modal li > a {
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     color: lightskyblue;
+}
+
+.extras .categoria-modal li > a:hover {
+    font-size: 1.5rem;
+    color: green;
 }
 .extras .categoria-modal li:hover {
     background-color: #e8eaed;
@@ -367,8 +515,15 @@ header {
     resize: none;
     font-size: 1rem;
     line-height: 1.3rem;
-    color: #3f424a;
+    color: var(--color-white);
     overflow: hidden;
+    background-color: var(--a);
+    font-family: "Roboto", sans-serif;
+    letter-spacing: 0.5px;
+}
+
+.section-add-todo .add-task textarea::placeholder {
+    color: var(--color-white);
 }
 
 .section-add-todo > form {
@@ -397,7 +552,7 @@ header {
 .section-add-todo .data-incial input {
     border: 0;
     font-size: 1rem;
-    width: 15ch;
+    width: auto;
     background-color: transparent;
 }
 
@@ -415,26 +570,23 @@ header {
     margin-inline: auto;
     display: flex;
     justify-content: center;
-    align-items:center;
+    align-items: center;
     padding: 0 0.5rem;
     gap: 3ch;
     padding-bottom: 6rem;
     flex-wrap: wrap;
-    margin-top: 1.5rem;
+    transition: all 0.3s ease-in-out;
 }
 
 /* Task cards */
 .task {
     position: relative;
     user-select: none;
-    box-shadow: 0 0 0 3px #fff, 0px 0px 1px 5px rgba(0, 0, 0, 0.2), inset 0 3px 0 rgba(0, 0, 0, 0.15),
-        inset 0 -3px 0 rgba(0, 0, 0, 0.15), inset 3px 0 0 rgba(0, 0, 0, 0.08), inset -3px 0 0 rgba(0, 0, 0, 0.08);
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.8);
     border-radius: 0.75rem;
     width: 100%;
-    max-width: 335px;
+    max-width: 800px;
     padding: 0.5rem;
-    padding-bottom: 1.3rem;
-
 }
 
 .task .title-task {
@@ -472,6 +624,10 @@ header {
 .task .check:checked {
     background-color: rgb(50, 205, 50);
     box-shadow: 0 0 0 2px rgba(50, 205, 50, 0.6);
+}
+
+.task .check::before {
+    content: "";
 }
 
 .task .check:checked::before {
@@ -577,27 +733,35 @@ header {
 }
 
 /* media large screen */
-@media screen and (min-width: 768px) {
-    .section-add-todo .extras .dados-iniciais {
-        justify-content: space-between;
+@media screen and (min-width: 945px) {
+    body {
+        overflow: auto;
     }
-    .section-add-todo .extras .dados-iniciais :last-child {
-        margin-left: 0;
+    main {
+        grid-template-columns: minmax(18.75rem, 23rem) minmax(28.75rem, 1fr);
+    }
+
+    main.show-mobile-menu {
+        grid-template-columns: minmax(18.75rem, 23rem) minmax(28.75rem, 1fr);
+    }
+
+    .section-add-todo.hidden {
+        visibility: visible;
     }
 
     .section-add-todo {
-        max-width: 800px;
+        max-width: 780px;
     }
 
     .section-add-todo .extras.active {
-        height: 70px;
-    }
-
-    .section-add-todo .extras > div {
-        justify-items: center;
+        height: 90px;
     }
 
     .task .options {
         padding: 0.3rem 0.6rem;
+    }
+
+    .mobile-menu {
+        display: none;
     }
 }

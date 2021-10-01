@@ -21,12 +21,8 @@
 
         <div class="container">
             <div class="title">
-                <button id="btnApi" class="api" title="Consumir api"><div class="svg"></div></button>
+                <button class="mobile-menu" id="mobileMenu"><i class="fas fa-bars"></i></button>
                 <h1>Keep Notes</h1>
-                <div class="theme" title="Modo escuro">
-                    <input class="theme-checkbox" type="checkbox" id="theme">
-                    <label class="theme-label" for="theme"></label>
-                </div>
             </div>
             <div class="wrap">
                 <div class="search" id="search">
@@ -49,64 +45,108 @@
         </div>
     </header>
 
-    <main>
-        <section>
-            <div class="todo-container" id="todoContainer">
-            </div>
-        </section>
-
-        <section class="section-add-todo" id="sectionAddTodo">
-            <div class="add-todo">
-                <form class="add-todo-form" id="addForm" autocomplete="off">
-
-                    <div class="add-task" id="addTask">
-                        <textarea id="addTaskInput" name="title" maxlength="300" rows="2"
-                            placeholder="Adicionar tarefa"></textarea>
-                        <button type="submit">
-                            <i class="fas fa-angle-up"></i>
-                        </button>
-
-                        <div class="extras" id="extras">
-                            <div>
-                                <div class="dados-iniciais">
-                                    <span id="extraId"></span>
-                                    <div class="data-incial">
-                                        <span>Criado em:</span>
-                                        <input type="text" name="data" id="data" readonly></input>
-                                    </div>
-                                </div>
-
-                                <div class="categorias">
-                                    <a class="categoria-btn" data-modalTarget="#categoriaModal">
-                                        <i class="fal fa-tags"></i>
-                                        <input type="text" name="categoria" id="categoria-input" value="Geral" readonly>
-                                        <i class="fas fa-chevron-down"></i>
-                                    </a>
-                                    <div class="categoria-modal modal hidden" id="categoriaModal">
-                                        <ul id="categoriasUl">
-                                            <li>Geral</li>
-                                            <li><input type="text" maxlength="10" id="addCategoria"><a
-                                                    id="btnAddCategoria"><i class="fas fa-plus-square"></i></a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-
-                                <div class="lembrete">
-                                    <a id="addLembrete"><i class="fal fa-bell-on"></i><span> Criar
-                                            lembrete</span></a>
-                                    <div id="lembreteData">
-                                        <input type="datetime-local" name="lembrete" id="" disabled><a id="removeLembrete"><i
-                                                class="fas fa-times"></i></a>
-                                    </div>
-                                </div>
-
-                            </div>
+    <main class="container">
+        <nav class="menu">
+            <ul class="navbar-nav">
+                <li class="nav-item detalhes">
+                    <h3>Detalhes</h3>
+                    <div class="flex">
+                        <div class="flex-item">
+                            <p id="countAlltodos">0</p>
+                            <p>Tarefas</p>
                         </div>
-
+                        <div class="flex-item">
+                            <p id="countCompleted">0</p>
+                            <p>Completas</p>
+                        </div>
+                        <div class="flex-item">
+                            <p id="countPending">0</p>
+                            <p>Pendentes</p>
+                        </div>
                     </div>
-                </form>
-            </div>
-        </section>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link api" id="btnApi" title="Consumir api">
+                        <i class="svg"></i>
+                        <span class="link-text">Carregar API</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <div class="nav-link">
+                        <i class="far fa-moon-stars"></i>
+                        <span class="link-text">Modo escuro</span>
+                        <input class="theme-checkbox" type="checkbox" id="theme">
+                        <label class="theme-label" for="theme"></label>
+                    </div>
+                </li>
+
+            </ul>
+        </nav>
+
+        <div class="grid-content">
+            <section class="section-todo-container">
+                <div class="todo-container" id="todoContainer">
+                </div>
+            </section>
+
+            <section class="section-add-todo bg_light" id="sectionAddTodo">
+                <div class="add-todo">
+                    <form class="add-todo-form" id="addForm" autocomplete="off">
+
+                        <div class="add-task" id="addTask">
+                            <textarea id="addTaskInput" name="title" maxlength="300" rows="2"
+                                placeholder="Adicionar tarefa"></textarea>
+                            <button type="submit">
+                                <i class="fas fa-angle-up"></i>
+                            </button>
+
+                            <div class="extras" id="extras">
+                                <div>
+                                    <div class="dados-iniciais">
+                                        <span id="extraId"></span>
+                                        <div class="data-incial">
+                                            <span>Criado em:</span>
+                                            <input type="text" name="data" id="data" readonly></input>
+                                        </div>
+                                    </div>
+
+                                    <div class="categorias">
+                                        <a class="categoria-btn" data-modalTarget="#categoriaModal">
+                                            <i class="fal fa-tags"></i>
+                                            <input type="text" name="categoria" id="categoria-input" value="Geral"
+                                                readonly>
+                                            <i class="fas fa-chevron-down"></i>
+                                        </a>
+                                        <div class="categoria-modal modal hidden" id="categoriaModal">
+                                            <ul id="categoriasUl">
+                                                <li>Geral</li>
+                                                <li>
+                                                    <a id="btnAddCategoria"><i class="fas fa-plus-square"></i></a>
+                                                    <input type="text" maxlength="10" id="addCategoria">
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <div class="lembrete">
+                                        <a id="addLembrete"><i class="fal fa-bell-on"></i><span> Criar
+                                                lembrete</span></a>
+                                        <div id="lembreteData">
+                                            <a id="removeLembrete"><i class="fas fa-times"></i></a>
+                                            <input type="datetime-local" name="lembrete" id="" disabled>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+            </section>
+        </div>
     </main>
 
 
