@@ -240,7 +240,7 @@ header {
     padding-inline: 1rem;
     border-radius: 0.75rem;
     margin-inline: 0.5rem;
-    font-size: 1.2rem;
+    font-size: 0.7rem;
     background-color: var(--color-link);
     color: var(--color-white);
 }
@@ -263,39 +263,38 @@ header {
     width: 100%;
     height: auto;
     max-height: 15rem;
-    overflow-y: auto;
     position: absolute;
-    top: 0;
-    left: -100%;
+    bottom: -3px;
+    left: 0;
     border-radius: 0 0 4px 4px;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.3);
     transform-origin: 0 0;
     z-index: 1;
     background-color: var(--bg-secondary);
-    transition: scale 0.1s ease, opacity .1s 0.1s ease;
-    transform: scale(0);
+    transition: scale 0.1s ease, opacity 0.1s 0.1s ease;
     opacity: 0;
+    transform: scale(0);
 }
-.filter-li-modal > ul > li{
+.filter-li-modal > ul > li {
     position: relative;
     padding: 0.5rem;
 }
-.filter-li-modal > ul > li::before{
-    content: '';
+.filter-li-modal > ul > li::before {
+    content: "";
     position: absolute;
     font-family: "Font Awesome 5 Pro";
     font-weight: 300;
-    right: .3rem;
+    right: 0.3rem;
     font-size: 1.3em;
     color: green;
 }
 
-.filter-li-modal > ul > li.active::before{
-    content: '\f058';
+.filter-li-modal > ul > li.active::before {
+    content: "\f058";
     position: absolute;
 }
 
-.filter-li-modal > ul > li:hover{
+.filter-li-modal > ul > li:hover {
     background-color: var(--color-hover);
     color: var(--color-white);
 }
@@ -313,11 +312,11 @@ header {
     background-color: var(--color-hover);
     color: var(--color-white);
 }
-.filter-modal > ul > li:hover .filter-li-modal{
+.filter-modal > ul > li:hover .filter-li-modal {
     color: var(--color);
-    transform: scale(1);
+    transform: translateY(100%) scale(1);
     opacity: 1;
-    transition: scale 0.1s ease, opacity .1s 0.1s ease;
+    transition: scale 0.1s ease, opacity 0.1s 0.1s ease;
 }
 
 .filter-modal > button {
@@ -444,7 +443,7 @@ header {
 }
 
 .section-add-todo .extras.active {
-    height: 120px;
+    height: 140px;
     transition: height 0.3s ease-in-out, clip 0.3s ease-in-out;
     clip-path: unset;
 }
@@ -849,5 +848,19 @@ header {
 
     .mobile-menu {
         display: none;
+    }
+
+
+    .filter-modal > ul > li:hover .filter-li-modal {
+        top: 0;
+        bottom: auto;
+        left: -100%;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@media screen and (min-width: 445px) {
+    .filter-btn {
+        font-size: 1.2rem;
     }
 }
