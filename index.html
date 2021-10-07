@@ -8,7 +8,7 @@
 
     <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.15.1/css/all.css">
-    <link rel="shortcut icon" href="./img/favicon (1).ico" type="image/x-icon"> <!-- TODO -->
+    <link rel="shortcut icon" href="./img/favicon.ico" type="image/x-icon"> <!-- TODO -->
 
     <script src="./js/index.js" defer></script>
 
@@ -18,7 +18,6 @@
 <body>
 
     <header>
-
         <div class="container">
             <div class="title">
                 <button class="mobile-menu" id="mobileMenu"><i class="fas fa-bars"></i></button>
@@ -46,7 +45,7 @@
                                 </a>
                                 <div class="filter-li-modal ">
                                     <ul id="ulFilterCategoria">
-
+                                        <li>Geral</li>
                                     </ul>
                                 </div>
                             </li>
@@ -87,7 +86,7 @@
                                 </div>
                             </li>
                         </ul>
-                        
+
                         <button class="cancel-button">Limpar</button>
                     </div>
                 </div>
@@ -143,7 +142,7 @@
 
         </div>
     </main>
-    
+
     <section class="section-add-todo bg_light" id="sectionAddTodo">
         <div class="add-todo">
             <form class="add-todo-form" id="addForm" autocomplete="off">
@@ -161,23 +160,23 @@
                                 <span id="extraId"></span>
                                 <div class="data-incial">
                                     <span>Criado em:</span>
-                                    <input type="text" name="data" id="data" readonly></input>
+                                    <input type="text" name="data" id="data" readonly>
                                 </div>
                             </div>
 
                             <div class="categorias">
-                                <a class="categoria-btn" data-modalTarget="#categoriaModal">
+                                <button type="button" class="categoria-btn" data-modalTarget="#categoriaModal">
                                     <i class="fal fa-tags"></i>
-                                    <input type="text" name="categoria" id="categoria-input" value="Geral"
-                                        readonly>
+                                    <span id="spanCategoriaAtual">Geral</span>
                                     <i class="fas fa-chevron-down"></i>
-                                </a>
+                                </button>
+                                <input type="text" name="categoria" id="categoria-input" value="Geral" readonly />
                                 <div class="categoria-modal modal hidden" id="categoriaModal">
                                     <ul id="categoriasUl">
                                         <li>Geral</li>
                                         <li>
                                             <a id="btnAddCategoria"><i class="fas fa-plus-square"></i></a>
-                                            <input type="text" maxlength="10" id="addCategoria">
+                                            <input type="text" maxlength="10" id="addCategoria" />
                                         </li>
                                     </ul>
                                 </div>
@@ -188,7 +187,7 @@
                                         lembrete</span></a>
                                 <div id="lembreteData">
                                     <a id="removeLembrete"><i class="fas fa-times"></i></a>
-                                    <input type="datetime-local" name="lembrete" id="" disabled>
+                                    <input type="datetime-local" name="lembrete" disabled />
                                 </div>
                             </div>
 

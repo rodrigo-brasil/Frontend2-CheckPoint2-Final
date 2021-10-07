@@ -162,7 +162,8 @@ function positionSectionAddToDo() {
 }
 
 function showMenuMobile() {
-    document.querySelector('main').classList.add('show-mobile-menu')
+    const mainElement = document.querySelector('main');
+    mainElement.classList.add('show-mobile-menu')
     section_Addtask.classList.add('hidden');
     document.body.style.overflow = "hidden";
 }
@@ -199,10 +200,10 @@ function filterTodos(event) {
     let arrayOrdenada = [...allTodos]
     switch (event) {
         case "Mais recente":
-            arrayOrdenada.sort((a, b) => b.id - a.id);
+            arrayOrdenada.sort((a, b) => a.id - b.id);
             break;
         case "Mais antigo":
-            arrayOrdenada.sort((a, b) => a.id - b.id);
+            arrayOrdenada.sort((a, b) => b.id - a.id);
             break;
         case "Pendentes":
             arrayOrdenada.sort((a, b) => b.completed - a.completed);
@@ -306,6 +307,11 @@ document.querySelector('#searchInput').addEventListener('input', function (e) {
     updateVisibleTasks();
 });
 
+document.querySelectorAll(".filter-modal > ul > li").forEach(element => {
+    element.addEventListener('click', function (e) {
+        element.classList.toggle('selected');
+    })
+});
 
 
 // Global events listener
@@ -336,8 +342,6 @@ document.addEventListener('click', function (e) {
                 task.style.opacity = opacity;
             }
         }
-
-
     }
 
     if (!e.target.closest('.modal') && !e.target.closest('[data-modalTarget]')) {
@@ -350,6 +354,7 @@ document.addEventListener('click', function (e) {
 
     if (e.target.closest("#categoriasUl > li:not(li:last-of-type)")) {
         document.getElementById("categoria-input").value = e.target.textContent;
+        document.getElementById("spanCategoriaAtual").textContent = e.target.textContent;
     }
 
     if (e.target.closest("input[type=checkbox][name=completed]")) {
@@ -364,20 +369,23 @@ document.addEventListener('click', function (e) {
     }
 
     if (e.target.closest(".filter-modal [class^=filter-li]")) {
-        
-        e.target.parentElement.querySelectorAll("li.active").forEach(element => element.classList.remove("active"));
+
+        e.target.parentElement.querySelectorAll("li.active").forEach(element => {
+            if (element != e.target)
+                element.classList.remove("active")
+        });
         e.target.classList.toggle('active');
         filterTodos(e.target.textContent);
         const qtdAtivos = document.querySelectorAll("li.active").length
         if (qtdAtivos > 0)
             document.getElementById("qtdFiltros").textContent = qtdAtivos
         else
-            document.getElementById("qtdFiltros").textContent = ""
+            document.getElementById("qtdFiltros").textContent = " "
     }
 
     if (e.target.closest(".filter-modal .cancel-button")) {
         document.querySelectorAll("li.active").forEach(element => element.classList.remove("active"));
-        document.getElementById("qtdFiltros").textContent = ""
+        document.getElementById("qtdFiltros").textContent = " "
         exibirPorOrdem();
     }
 
