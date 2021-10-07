@@ -400,7 +400,7 @@ window.addEventListener('resize', function () {
 });
 
 // init
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('load', function () {
     init();
 });
 
