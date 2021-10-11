@@ -10,9 +10,9 @@ const div_todoContainer = document.getElementById('todoContainer');
 const mobile_menu = document.getElementById('mobileMenu');
 const date = new Date();
 const allTodos = [];
+const largeScreen = window.matchMedia("(min-width: 768px)");
 let idGlobal = 0;
 let apiUsed = false;
-
 
 function addTodotoArray(obj) {
     const todosObj = createTodoOjbect(obj)
@@ -99,6 +99,71 @@ function deletarTodo(id) {
     atualizarDetalhes();
 }
 
+function Confirm(options) {
+    options = Object.assign({}, {
+        title: '',
+        message: '',
+        okText: 'OK',
+        cancelText: 'Cancel',
+        onok: function () { },
+        oncancel: function () { }
+    }, options);
+
+    const html = `
+            <div class="confirm">
+                <div class="confirm__window">
+                    <div class="confirm__titlebar">
+                        <span class="confirm__title">${options.title}</span>
+                        <button class="confirm__close">&times;</button>
+                    </div>
+                    <div class="confirm__content">${options.message}</div>
+                    <div class="confirm__buttons">
+                        <button class="confirm__button confirm__button--ok confirm__button--fill">${options.okText}</button>
+                        <button class="confirm__button confirm__button--cancel">${options.cancelText}</button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+    const template = document.createElement('template');
+    template.innerHTML = html;
+
+    // Elements
+    const confirmEl = template.content.querySelector('.confirm');
+    const btnClose = template.content.querySelector('.confirm__close');
+    const btnOk = template.content.querySelector('.confirm__button--ok');
+    const btnCancel = template.content.querySelector('.confirm__button--cancel');
+    const _close = () => {
+        confirmEl.classList.add('confirm--close');
+        confirmEl.addEventListener('animationend', () => {
+            document.body.removeChild(confirmEl);
+        });
+    };
+
+    confirmEl.addEventListener('click', e => {
+        if (e.target === confirmEl) {
+            options.oncancel();
+            _close(confirmEl);
+        }
+    });
+
+    btnOk.addEventListener('click', () => {
+        options.onok();
+        _close(confirmEl);
+    });
+
+    [btnCancel, btnClose].forEach(el => {
+        el.addEventListener('click', () => {
+            options.oncancel();
+            _close(confirmEl);
+        });
+    });
+
+    document.body.appendChild(template.content);
+}
+
+
+
 function validarInputs(input) {
     if (input.disabled)
         return true;
@@ -113,9 +178,9 @@ function validarInputs(input) {
 function updateVisibleTasks(todos = allTodos) {
     todos.forEach(todo => {
         if (todo.visible) {
-            document.querySelector(`[data - idTask="${todo.id}"]`).style.display = "block";
+            document.querySelector(`[data-idTask="${todo.id}"]`).style.display = "block";
         } else {
-            document.querySelector(`[data - idTask= "${todo.id}"]`).style.display = "none";
+            document.querySelector(`[data-idTask="${todo.id}"]`).style.display = "none";
         }
     });
 }
@@ -145,15 +210,21 @@ async function getTodosApi() {
 }
 
 async function addTodosApiIntoDom() {
+    document.querySelector('#apiLoader').classList.add('active');
+    document.body.style.cursor = "wait";
     const todosApi = await getTodosApi();
-    todosApi.forEach(todo => {
-        todo.categoria = "API";
-        addTodotoArray(todo)
+    setTimeout(() => {
+        todosApi.forEach(todo => {
+            todo.categoria = "API";
+            addTodotoArray(todo)
+        }, 800);
+        document.querySelector('#apiLoader').classList.remove('active');
+        document.body.style.cursor = "default";
     });
 }
 
 function positionSectionAddToDo() {
-    const { left, right, width } = div_todoContainer.getBoundingClientRect()
+    const { left, width } = div_todoContainer.getBoundingClientRect()
     const midpoint = width / 2;
     const midPosition = left + midpoint;
     const offset = section_Addtask.offsetWidth / 2;
@@ -221,6 +292,10 @@ function filterTodos(event) {
             break;
     }
     exibirPorOrdem(arrayOrdenada);
+}
+
+function toggleClass(){
+    element.classList.toggle('selected');
 }
 
 function init() {
@@ -307,11 +382,23 @@ document.querySelector('#searchInput').addEventListener('input', function (e) {
     updateVisibleTasks();
 });
 
-document.querySelectorAll(".filter-modal > ul > li").forEach(element => {
-    element.addEventListener('click', function (e) {
-        element.classList.toggle('selected');
-    })
-});
+largeScreen.addEventListener('change',(e) => {
+    if (e.matches) {
+        hideMenuMobile();
+        document.querySelectorAll(".filter-modal > ul > li").forEach(element => {
+             element.parentNode.replaceChild(element.cloneNode(true), element);
+        })
+    }
+    else {
+        document.querySelectorAll(".filter-modal > ul > li").forEach(element => {
+            element.addEventListener('click', function () {
+                element.classList.toggle('selected');
+            })
+        })
+    }
+})
+
+
 
 
 // Global events listener
@@ -324,24 +411,34 @@ document.addEventListener('click', function (e) {
         const button = e.target.closest('.task .delete-button')
         const task = button.parentElement.parentElement.parentElement;
 
-        let idInterval = null;
-        clearInterval(idInterval);
-        idInterval = setInterval(deleteAnimation, 5);
-        let opacity = 1;
-        let pos = 0;
-        function deleteAnimation() {
-            if (opacity <= 0) {
-                clearInterval(idInterval);
-                const id = task.dataset["idTask"]
-                deletarTodo(id)
-                task.remove();
-            } else {
-                pos += 5;
-                opacity = opacity - 0.01;
-                task.style.left = pos + 'px';
-                task.style.opacity = opacity;
+        const callback = () => {
+            let idInterval = null;
+            clearInterval(idInterval);
+            idInterval = setInterval(deleteAnimation, 5);
+            let opacity = 1;
+            let pos = 0;
+            function deleteAnimation() {
+                if (opacity <= 0) {
+                    clearInterval(idInterval);
+                    const id = task.dataset["idTask"]
+                    deletarTodo(id)
+                    task.remove();
+                } else {
+                    pos += 5;
+                    opacity = opacity - 0.01;
+                    task.style.left = pos + 'px';
+                    task.style.opacity = opacity;
+                }
             }
         }
+
+        Confirm({
+            title: 'Excluir Tarefa',
+            message: 'Tem certeza que deseja excluir esta tarefa?',
+            okText: 'Sim',
+            cancelText: 'Não',
+            onok: callback,
+        });
     }
 
     if (!e.target.closest('.modal') && !e.target.closest('[data-modalTarget]')) {
@@ -394,9 +491,6 @@ document.addEventListener('click', function (e) {
 
 window.addEventListener('resize', function () {
     positionSectionAddToDo();
-    if (window.innerWidth > 945) {
-        hideMenuMobile();
-    }
 });
 
 // init

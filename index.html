@@ -21,14 +21,14 @@
         <div class="container">
             <div class="title">
                 <button class="mobile-menu" id="mobileMenu"><i class="fas fa-bars"></i></button>
-                <h1>Keep Notes</h1>
+                <h1>My Notes</h1>
             </div>
             <div class="wrap">
                 <div class="search" id="search">
+                    <input class="search-input" id="searchInput" type="search" placeholder="Pesquisar">
                     <label for="searchInput">
                         <i class="fas fa-search"></i>
                     </label>
-                    <input class="search-input" id="searchInput" type="search" placeholder="Pesquisar">
                 </div>
                 <div class="filter">
                     <button class="filter-btn" data-modalTarget="#filterModal">
@@ -187,7 +187,7 @@
                                         lembrete</span></a>
                                 <div id="lembreteData">
                                     <a id="removeLembrete"><i class="fas fa-times"></i></a>
-                                    <input type="datetime-local" name="lembrete" disabled />
+                                    <input type="date" name="lembrete" disabled />
                                 </div>
                             </div>
 
@@ -198,6 +198,10 @@
             </form>
         </div>
     </section>
+
+    <div class="overlay" id="apiLoader">
+        <div class="loader"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+    </div>
 
 </body>
 
